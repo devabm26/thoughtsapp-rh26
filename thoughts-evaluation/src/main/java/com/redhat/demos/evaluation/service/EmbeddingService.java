@@ -8,7 +8,6 @@ import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.faulttolerance.Retry;
-import org.jboss.logging.Logger;
 
 import java.util.UUID;
 
