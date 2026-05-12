@@ -35,6 +35,11 @@ These are initially seeded by a Flyway migration (V3) with placeholder values. T
 - **OpenAI-compatible embedding model endpoint** (e.g. OpenShift AI serving `text-embedding-ada-002`)
 
 ## Environment Variables
+```
+export EMBEDDING_MODEL_NAME=nomic-embed-text-v1-5
+export OPENSHIFT_AI_API_KEY=<<LITELLM_API_KEY>>
+export OPENAI_BASE_URL="https://litellm-prod.apps.maas.redhatworkshops.io/v1"
+```
 
 ### Database (production only — dev/test use Quarkus Dev Services)
 
