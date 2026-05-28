@@ -1,0 +1,16 @@
+node_modules
+dist
+.git
+.gitignore
+*.md
+README.md
+BUILD.md
+.env*
+playwright-report
+playwright-results
+test-results
+coverage
+*.log
+.DS_Store
+bun.lockb
+bun.lock

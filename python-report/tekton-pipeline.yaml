@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-python-report
+spec:
+  params:
+    - name: IMAGE
+      type: string
+      description: The image name to build
+    - name: DOCKERFILE
+      type: string
+      description: Path to Dockerfile
+    - name: CONTEXT
+      type: string
+      description: Build context
+  steps:
+    - name: build
+      image: quay.io/centos/centos:stream8
+      script: |
+        #!/usr/bin/env bash
+        set -e
+        buildah bud --tls-verify=false -t $(params.IMAGE) -f $(params.DOCKERFILE) $(params.CONTEXT)
+        buildah push $(params.IMAGE) --tls-verify=false
+  sidecars: []
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: python-report-build
+spec:
+  params:
+    - name: IMAGE
+      type: string
+      default: quay.io/redhat_na_ssa/thoughtsapp-python-report:latest
+  tasks:
+    - name: build
+      taskRef:
+        name: build-python-report
+      params:
+        - name: IMAGE
+          value: $(params.IMAGE)
+        - name: DOCKERFILE
+          value: Dockerfile
+        - name: CONTEXT
+          value: .
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: python-report-build-run
+spec:
+  pipelineRef:
+    name: python-report-build
+  params:
+    - name: IMAGE
+      value: quay.io/redhat_na_ssa/thoughtsapp-python-report:latest

@@ -1,0 +1,43 @@
+####
+# Multi-stage build for thoughts-evaluation (Quarkus JVM mode with Langchain4j)
+#
+# This ContainerFile builds the Quarkus AI evaluation service with Langchain4j support.
+####
+
+# Stage 1: Build the application
+FROM registry.access.redhat.com/ubi9/openjdk-21:latest AS builder
+
+USER root
+WORKDIR /build
+
+# Install required build tools
+RUN microdnf install -y gzip tar && microdnf clean all
+
+# Copy Maven wrapper and pom.xml
+COPY mvnw mvnw.cmd pom.xml ./
+COPY .mvn .mvn
+
+# Download dependencies (cached layer)
+RUN ./mvnw dependency:go-offline -B
+
+# Copy source code
+COPY src ./src
+
+# Build the application (override compiler version to match container JDK)
+RUN ./mvnw package -DskipTests -Dquarkus.package.jar.type=uber-jar -Dmaven.compiler.release=21
+
+# Stage 2: Runtime image
+FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:latest
+
+ENV LANGUAGE='en_US:en'
+
+# Copy the uber jar from builder
+COPY --from=builder --chown=185 /build/target/*-runner.jar /deployments/quarkus-run.jar
+
+EXPOSE 8088
+USER 185
+
+ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+
+ENTRYPOINT ["java", "-jar", "/deployments/quarkus-run.jar"]

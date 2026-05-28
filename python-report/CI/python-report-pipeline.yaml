@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: python-report-build
+spec:
+  params:
+    - name: IMAGE
+      type: string
+      default: quay.io/redhat_na_ssa/thoughtsapp-python-report:latest
+  tasks:
+    - name: build
+      taskRef:
+        name: build-python-report
+      params:
+        - name: IMAGE
+          value: $(params.IMAGE)
+        - name: DOCKERFILE
+          value: Dockerfile
+        - name: CONTEXT
+          value: .
