@@ -3,7 +3,7 @@
 -- Reversible: Yes (see rollback script)
 
 -- Create evaluation_vectors table
-CREATE TABLE evaluation_vectors (
+CREATE TABLE IF NOT EXISTS evaluation_vectors (
     id UUID PRIMARY KEY,
     vector_data JSONB NOT NULL,
     vector_type VARCHAR(20) NOT NULL CHECK (vector_type IN ('POSITIVE', 'NEGATIVE')),
@@ -12,7 +12,7 @@ CREATE TABLE evaluation_vectors (
 );
 
 -- Create index on vector_type for filtering queries
-CREATE INDEX idx_evaluation_vectors_type ON evaluation_vectors(vector_type);
+CREATE INDEX IF NOT EXISTS idx_evaluation_vectors_type ON evaluation_vectors(vector_type);
 
 -- Rollback script (to be executed manually if needed):
 -- DROP INDEX idx_evaluation_vectors_type;

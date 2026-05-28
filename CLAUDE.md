@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Positive Thoughts** is a microservices demo application showcasing Red Hat OpenShift, Quarkus, and AI integration. It manages a collection of positive thoughts (quotes) with event-driven AI evaluation. Designed for solutions architects running demos and enterprise Java developers learning cloud-native patterns.
 
-**Key versions:** Java 25, Quarkus 3.31.2, Langchain4j 1.6.0
+**Key versions:** Java 21, Quarkus 3.31.2, Langchain4j 1.6.0
 
 ## Build and Dev Commands
 

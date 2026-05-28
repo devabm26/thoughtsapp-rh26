@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thoughts-admin-ui
+  labels:
+    app: thoughts-admin-ui
+    app.kubernetes.io/part-of: thoughtsapp
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: thoughts-admin-ui
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thoughts-admin-ui
+  labels:
+    app: thoughts-admin-ui
+    app.kubernetes.io/part-of: thoughtsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thoughts-admin-ui
+  template:
+    metadata:
+      labels:
+        app: thoughts-admin-ui
+    spec:
+      containers:
+      - name: thoughts-admin-ui
+        image: quay.io/redhat_na_ssa/thoughtsapp-admin-ui:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: VITE_API_BASE_URL
+          value: https://thoughts-backend-thoughts-app.apps.cluster-6pfqs.6pfqs.sandbox2325.opentlc.com
+        - name: VITE_EVALUATION_API_BASE_URL
+          value: https://thoughts-evaluation-thoughts-app.apps.cluster-6pfqs.6pfqs.sandbox2325.opentlc.com
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+          requests:
+            cpu: 50m
+            memory: 64Mi
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: thoughts-admin-ui
+  labels:
+    app: thoughts-admin-ui
+    app.kubernetes.io/part-of: thoughtsapp
+spec:
+  to:
+    kind: Service
+    name: thoughts-admin-ui
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

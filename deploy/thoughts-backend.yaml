@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thoughts-backend
+  labels:
+    app: thoughts-backend
+    app.kubernetes.io/part-of: thoughtsapp
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: thoughts-backend
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thoughts-backend
+  labels:
+    app: thoughts-backend
+    app.kubernetes.io/part-of: thoughtsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thoughts-backend
+  template:
+    metadata:
+      labels:
+        app: thoughts-backend
+    spec:
+      containers:
+      - name: thoughts-backend
+        image: quay.io/redhat_na_ssa/thoughtsapp-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: QUARKUS_DATASOURCE_JDBC_URL
+          value: jdbc:postgresql://postgresql:5432/thoughts
+        - name: QUARKUS_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: database-user
+        - name: QUARKUS_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: database-password
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: thoughtsapp-kafka-kafka-bootstrap:9092
+        livenessProbe:
+          httpGet:
+            path: /q/health/live
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /q/health/ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: thoughts-backend
+  labels:
+    app: thoughts-backend
+    app.kubernetes.io/part-of: thoughtsapp
+spec:
+  to:
+    kind: Service
+    name: thoughts-backend
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

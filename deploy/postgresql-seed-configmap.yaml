@@ -1,0 +1,312 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-seed-data
+  labels:
+    app: postgresql
+    app.kubernetes.io/part-of: thoughtsapp
+data:
+  import.sql: |+
+    -- Import quotes from quotes_transformed.json
+    -- Generated SQL INSERT statements
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Sometimes you climb out of bed in the morning and you think, I’m not going to make it, but you laugh inside—remembering all the times you’ve felt that way.', 'Charles Bukowski', 'poet and novelist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'You can''t depend on your judgment when your imagination is out of focus.', 'Mark Twain', 'American humorist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I hope that in this year to come, you make mistakes. Because if you are making mistakes, then you are making new things, trying new things, learning, living, pushing yourself, changing yourself, changing your world. You’re doing things you''ve never done before, and more importantly, you’re doing something.', 'Neil Gaiman', 'author of the comic book series The Sandman', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Every single cell in the human body replaces itself over a period of seven years. That means there’s not even the smallest part of you now that was part of you seven years ago.', 'Steven Hall', 'British novelist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Who is the happier man, he who has braved the storm of life and lived, or he who has stayed securely on shore and merely existed?', 'Hunter S. Thompson', '“gonzo” journalist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Optimism is a perfectly legitimate response to failure.', 'Stephen King', 'horror author', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'In three words, I can sum up everything I’ve learned about life. It goes on. In all the confusions of today, with all our troubles . . . with politicians and people slinging the word fear around, all of us become discouraged . . . tempted to say this is the end, the finish. But life — it goes on. It always has. It always will. Don’t forget that.', 'Robert Frost', 'poet', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'The world only exists in your eyes. You can make it as big or as small as you want.', 'F. Scott Fitzgerald', 'author of The Great Gatsby', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I may not have gone where I intended to go, but I think I have ended up where I needed to be.', 'Douglas Adams', 'author of The Hitchhiker''s Guide to the Galaxy', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Life is what happens to us while we are making other plans.', 'Allen Saunders', 'cartoonist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Today I shall behave as if this is the day I will be remembered.', 'Dr. Seuss', 'children''s author, political cartoonist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Ever tried. Ever failed. No matter. Try again. Fail again. Fail better.', 'Samuel Beckett', 'Irish novelist and playwright', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I don''t like work— no man does— but I like what is in the work— the chance to find yourself.', 'Joseph Conrad', 'author of Heart of Darkness (among other novels)', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'The world breaks everyone and afterward many are strong at the broken places.', 'Ernest Hemingway', 'legendary author and short story writer', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I began to realize how important it was to be an enthusiast in life. He taught me that if you are interested in something, no matter what it is, go at it at full speed ahead. Embrace it with both arms, hug it, love it and above all become passionate about it. Lukewarm is no good. Hot is no good either. White hot and passionate is the only thing to be.', 'Roald Dahl', 'author of Charlie and the Chocolate Factory (among other novels)', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Your life is the fruit of your own doing. You have no one to blame but yourself.', 'Joseph Campbell', 'mythology historian and author of The Hero with a Thousand Faces', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Failure is the condiment that gives success its flavor.', 'Truman Capote', 'author of books like Breakfast at Tiffany''s and In Cold Blood', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'We are all in the gutter, but some of us are looking at the stars.', 'Oscar Wilde', 'playwright', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Promise me you will not spend so much time treading water and trying to keep your head above the waves that you forget, truly forget, how much you have always loved to swim.', 'Tyler Knott Gregson', 'poet', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'It is better to fail in originality than to succeed in imitation. He who has never failed somewhere, that man can not be great. Failure is the true test of greatness.', 'Herman Melville', 'Moby Dick novelist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Act as if what you do makes a difference. It does.', 'William James', 'the Father of American psychology', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'During our brief stay on planet Earth, we owe ourselves and our descendants the opportunity to explore — in part because it''s fun to do. But there’s a far nobler reason. The day our knowledge of the cosmos ceases to expand, we risk regressing to the childish view that the universe figuratively and literally revolves around us.', 'Neil DeGrasse Tyson', 'astrophysicist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'The important thing is not to stop questioning. One cannot help but be in awe when he contemplates the mysteries of eternity, of life, of the marvelous structure of reality. It is enough if one tries merely to comprehend a little of this mystery each day.', 'Albert Einstein', 'theoretical physicist who developed the theory of relativity', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Results! Why, man, I have gotten a lot of results! I know several thousand things that won’t work.', 'Thomas Edison', 'inventor of the phonograph and the light bulb (among other things)', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Remember to look up at the stars and not down at your feet. Try to make sense of what you see and wonder about what makes the Universe exist. Be curious. And however difficult life may seem, there is always something you can do and succeed at. It matters that you don’t just give up.', 'Stephen Hawking', 'theoretical physicist, cosmologist, and author', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'If we worked on the assumption that what is accepted as true really is true, then there would be little hope for advance.', 'Orville Wright', 'one half of the Wright Brothers', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'All that was great in the past was ridiculed, condemned, combated, suppressed — only to emerge all the more powerfully, all the more triumphantly from the struggle.', 'Nikola Tesla', 'inventor, engineer, and futurist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Everyone you will ever meet knows something that you don’t. And this is troubling for many of us know-it-alls.', 'Bill Nye the Science Guy', 'Unknown', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Never be the brightest person in the room; then you can’t learn anything.', 'James Watson', 'molecular biologist who helped discover DNA’s double helix structure', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'A man, as a general rule, owes very little to what he is born with — a man is what he makes of himself.', 'Alexander Graham Bell', 'inventor of the first practical telephone', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'When you reach the end of your rope, tie a knot in it and hang on.', 'Franklin D. Roosevelt', '32nd president of the United States', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Being responsible sometimes means pissing people off.', 'Colin Powell Former United States Secretary of State', 'Unknown', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Do not pray for easy lives, pray to be stronger men.', 'John F. Kennedy', '35th president of the United States', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'There is no passion to be found playing small—in settling for a life that is less than the one you are capable of living.', 'Nelson Mandela', 'anti-apartheid revolutionary and President of South Africa', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'You will never reach your destination if you stop and throw stones at every dog that barks.', 'Winston Churchill', 'former Prime Minister of the United Kingdom', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'The future rewards those who press on. I don''t have time to feel sorry for myself. I don’t have time to complain. I’m going to press on.', 'Barack Obama', '44th president of the United States', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'There is nothing impossible to him who will try.', 'Alexander the Great', 'king of the ancient Greek kingdom of Macedo', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'In reading the lives of great men, I found that the first victory they won was over themselves…self-discipline with all of them came first.', 'Harry S. Truman', '33rd president of the United States', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Faith is taking the first step even when you don’t see the whole staircase.', 'Martin Luther King', 'Jr., leader of the civil rights movement', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'He that lives upon hope, dies farting.', 'Benjamin Franklin', 'one of the Founding Fathers of the United States', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'You miss 100% of the shots you don''t take.', 'Wayne Gretzky', 'hockey Hall of Famer', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'If you want to be the best, you have to do things other people aren’t willing to do.', 'Michael Phelps', 'Olympic swimmer', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I like criticism. It makes you strong.', 'LeBron James', 'NBA superstar', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'The battles that count aren’t the ones for gold medals. The struggles within yourself — the invisible, inevitable battles inside all of us—that’s where it’s at.', 'Jesse Owens', 'winner of four Gold medals at the 1936 Summer Olympics in Germany', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I hated every minute of training, but I said, ‘Don’t quit. Suffer now and live the rest of your life as a champion.’', 'Muhammad Ali', 'boxing legend', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Never let the fear of striking out keep you from playing the game.', 'Babe Ruth', 'i.e. “The Bambino,” baseball icon', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Winning isn’t everything, but wanting to win is.', 'Vince Lombardi', 'football coach and NFL executive', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'There are no traffic jams along the extra mile.', 'Roger Staubach', 'Hall-of-Fame football player', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I’ve missed more than 9,000 shots in my career. I''ve lost almost 300 games. 26 times, I''ve been trusted to take the game winning shot and missed. I''ve failed over and over and over again in my life. And that is why I succeed.', 'Michael Jordan', 'NBA superstar', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'In life, you’ll have your back up against the wall many times. You might as well get used to it.', 'Paul “Bear” Bryant', 'legendary University of Alabama coach', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'We don’t know what the next second will bring and what a fantastic thing this is. This can get easily forgotten in the routine of life, and that’s something I’m trying to bring to my attention at all times. Don’t forget you’re alive. We’re not dead, you know. This is the greatest thing.', 'Joe Strummer', 'lead singer of the Clash', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Some people feel the rain, others just get wet.', 'Roger Miller', 'country singer', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'A man is a success if he gets up in the morning and gets to bed at night, and in between, he does what he wants to do.', 'Bob Dylan', 'folk and rock star', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'As you get older, the questions come down to about two or three. How long? And what do I do with the time I''ve got left?', 'David Bowie', 'aka Ziggy Stardust', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'No one you have been and no place you have gone ever leaves you. The new parts of you simply jump in the car and go along for the rest of the ride. The success of your journey and your destination all depend on who’s driving.', 'Bruce Springsteen', 'the Boss', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I have no education. I have inspiration. If I was educated, I would be a damn fool.', 'Bob Marley', 'reggae legend', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'If you put out 150 percent, then you can always expect 100 percent back. That’s what I was always told as a kid, and it’s worked for me so far!', 'Justin Timberlake', 'pop superstar', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I''m not afraid of dying, I’m afraid of not trying.', 'Jay-Z', 'hip-hop legend', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I wish to begin again on a daily basis. To be born again every day is something that I try to do. And I’m deadly serious about that.', 'Bono', 'lead singer of U2', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'The things that come to those that wait may be the things left by those that got there first.', 'Steven Tyler', 'frontman for Aerosmith', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Only put off until tomorrow what you are willing to die having left undone.', 'Pablo Picasso', 'Cubist painter', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Have no fear of perfection, you’ll never reach it.', 'Salvador Dalí', 'surrealist artist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Some days I can’t get an idea, and I think, ‘Man, I’m just washed up,’ but it’s just a mood.', 'Jean-Michel Basquiat', 'graffiti artist and neo-expressionist painter', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Do I believe in God? Yes, when I am working.', 'Henri Matisse', 'French painter', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'We don’t make mistakes, just happy little accidents.', 'Bob Ross', 'painter and television host', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I shut my eyes in order to see.', 'Paul Gauguin', 'a French Post-Impressionist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I would rather die of passion than of boredom.', 'Vincent Van Gogh', 'Dutch post-impressionist painter', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Nothing is a waste of time if you use the experience wisely.', 'Auguste Rodin', 'a French sculptor and the founder of modern sculpture', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'You can''t just turn on creativity like a faucet. You have to be in the right mood. What mood is that? Last-minute panic.', 'Bill Watterson', 'creator of Calvin And Hobbes', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Don’t think about making art, just get it done. Let everyone else decide if it’s good or bad, whether they love it or hate it. While they are deciding, make even more art.', 'Andy Warhol', 'icon of the pop art movement', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I intend to live forever, or die trying.', 'Groucho Marx', 'leader of the Marx Brothers', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I live a little bit on the seat of my pants, I try to be alert and available. I try to be available for life to happen to me. We’re in this life, and if you’re not available, the sort of ordinary time goes past and you didn’t live it. But if you’re available, life gets huge. You’re really living it.', 'Bill Murray', 'comedian and actor', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Your assumptions are your windows on the world. Scrub them off every once in a while, or the light won’t come in.', 'Alan Alda', 'star of the TV show M*A*S*H and numerous movies', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'You pray for rain, you gotta deal with the mud, too. That''s part of it.', 'Denzel Washington', 'Oscar-winning actor', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Success is just a war of attrition. Sure, there’s an element of talent you should probably possess. But if you just stick around long enough, eventually something is going to happen.', 'Dax Shepard', 'star ofIdiocracy (among other movies)', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'The successful warrior is the average man, with laser-like focus.', 'Bruce Lee', 'actor and martial artist', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I don’t think I''ve mastered anything. I’m still wrestling with the same frustrations, the same issues, the same problems as I always did. That’s what life is like.', 'Harrison Ford', 'Star Wars star (among other movies)', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'If your ship doesn’t come in, swim out to meet it!', 'Jonathan Winters', 'comedian and actor', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'If you can do what you do best and be happy, you’re further along in life than most people.', 'Leonardo DiCaprio', 'Oscar-winning star of Titanic (among other movies)', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Strength does not come from winning. Your struggles develop your strengths. When you go through hardships and decide not to surrender, that is strength.', 'Arnold Schwarzenegger', 'Actor and Governor', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Whether you think you can or you think you can’t – you''re right.', 'Henry Ford', 'founder of the Ford Motor Company', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'My general attitude to life is to enjoy every minute of every day. I never do anything with a feeling of, ‘Oh God, I''ve got to do this today.’', 'Sir Richard Branson', 'head of Virgin Group Ltd.', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Don''t worry about failure; you only have to be right once.', 'Drew Houston', 'co-founder and CEO of Dropbox', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'As I grow older, I pay less attention to what men say. I just watch what they do.', 'Andrew Carnegie', 'Founder of Carnegie Steel Company', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'You are remembered for the rules you break.', 'Phil Knight', 'co-founder and chairman emeritus of Nike, Inc', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Try to turn every disaster into an opportunity.', 'John D. Rockefeller', 'business tycoon', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Success is a lousy teacher. It seduces smart people into thinking they can’t lose.', 'Bill Gates', 'co-founder of Microsoft Corporation', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Work like there is someone working 24 hours a day to take it away from you.', 'Marc Cuban', 'entrepreneur, investor, and owner of the Dallas Mavericks', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Would you like me to give you a formula for success? It’s quite simple, really: Double your rate of failure. You are thinking of failure as the enemy of success. But it isn''t at all. You can be discouraged by failure or you can learn from it, so go ahead and make mistakes. Make all you can. Because remember that''s where you will find success.', 'Thomas J Watson', 'former chairman and CEO at IBM', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Someone is sitting in the shade today because someone planted a tree a long time ago.', 'Warren Buffett', 'CEO of Berkshire Hathaway', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'The difference between winning and losing is most often not quitting.', 'Walt Disney', 'pioneer of the American animation industry', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Either you run the day, or the day runs you.', 'Jim Rohn', 'entrepreneur and motivational speaker.', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'If you absolutely can’t tolerate critics, then don’t do anything new or interesting.', 'Jeff Bezos', 'founder and CEO of Amazon', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Don’t let the fear of losing be greater than the excitement of winning.', 'Robert Kiyosaki', 'founder of Rich Global LLC and the Rich Dad Company', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Celebrate your successes. Find some humour in your failures.', 'Sam Walton', 'founder of Wal-Mart and Sam’s Club', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'We are what we repeatedly do. Excellence, then, is not an act but a habit.', 'William Durant', 'industrialist and founder of General Motors', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Only those who are asleep make no mistakes.', 'Ingvar Kamprad', 'Founder of IKEA', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'I can''t change the direction of the wind, but I can adjust my sails to always reach my destination.', 'Jimmy Dean', 'creator of the Jimmy Dean sausage brand', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+    INSERT INTO thoughts (id, content, author, author_bio, status, thumbs_up, thumbs_down, created_at, updated_at)
+    VALUES (gen_random_uuid(), 'Your time is limited, so don’t waste it living someone else’s life. Don’t be trapped by dogma―which is living with the results of other people’s thinking. Don’t let the noise of other’s opinions drown out your own inner voice.', 'Steve Jobs', 'CEO and co-founder of Apple Inc.', 'APPROVED', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+kind: ConfigMap
+metadata:
+  name: postgresql-seed-data

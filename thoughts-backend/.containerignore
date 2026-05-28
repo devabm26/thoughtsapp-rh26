@@ -1,4 +1,7 @@
-target/
+# Exclude target for multi-stage builds
+# For ContainerFile.runtime, we need target/*.jar, so don't exclude it
+# target/
+
 .mvn/wrapper/maven-wrapper.jar
 test/
 *.md

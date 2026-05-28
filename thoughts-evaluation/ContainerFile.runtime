@@ -1,0 +1,19 @@
+####
+# Runtime-only ContainerFile for thoughts-evaluation
+# Use this when you've already built the uber-jar locally
+# Run: ./mvnw package -DskipTests -Dquarkus.package.jar.type=uber-jar before building this image
+####
+
+FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:latest
+
+ENV LANGUAGE='en_US:en'
+
+# Copy the pre-built uber-jar (self-contained JAR with all dependencies)
+COPY --chown=185 target/ai-evaluation-service-1.0-runner.jar /deployments/app.jar
+
+EXPOSE 8088
+USER 185
+
+ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+
+ENTRYPOINT ["java", "-jar", "/deployments/app.jar"]

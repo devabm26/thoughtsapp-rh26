@@ -1,0 +1,55 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgresql-seed-data
+  labels:
+    app: postgresql
+    app.kubernetes.io/part-of: thoughtsapp
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+        app: postgresql-seed-job
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: seed-data
+        image: postgres:17
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Waiting for PostgreSQL to be ready..."
+          until pg_isready -h postgresql -U thoughts; do
+            echo "PostgreSQL is unavailable - sleeping"
+            sleep 2
+          done
+
+          echo "PostgreSQL is ready - checking if data already exists..."
+          COUNT=$(psql -h postgresql -U thoughts -d thoughts -t -c "SELECT COUNT(*) FROM thoughts;" 2>/dev/null || echo "0")
+
+          if [ "$COUNT" -gt 0 ]; then
+            echo "Database already has $COUNT records - skipping seed"
+            exit 0
+          fi
+
+          echo "Loading seed data..."
+          psql -h postgresql -U thoughts -d thoughts -f /sql/import.sql
+
+          echo "Seed data loaded successfully!"
+        env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: database-password
+        volumeMounts:
+        - name: sql-script
+          mountPath: /sql
+          readOnly: true
+      volumes:
+      - name: sql-script
+        configMap:
+          name: postgresql-seed-data

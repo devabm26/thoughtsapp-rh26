@@ -24,8 +24,8 @@ RUN ./mvnw dependency:go-offline -B
 # Copy source code
 COPY src ./src
 
-# Build the application (override compiler version to match container JDK)
-RUN ./mvnw package -DskipTests -Dquarkus.package.jar.type=uber-jar -Dmaven.compiler.release=21
+# Build the application
+RUN ./mvnw package -DskipTests -Dquarkus.package.jar.type=uber-jar
 
 # Stage 2: Runtime image
 FROM registry.access.redhat.com/ubi9/openjdk-21-runtime:latest

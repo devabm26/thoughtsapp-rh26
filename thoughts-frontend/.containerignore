@@ -1,5 +1,5 @@
+# Exclude source files and dev dependencies
 node_modules
-.next
 .git
 .gitignore
 *.md
@@ -10,3 +10,8 @@ jest.setup.js
 .env*
 *.log
 .DS_Store
+app
+components
+lib
+
+# Keep public, .next/standalone and .next/static for runtime build
