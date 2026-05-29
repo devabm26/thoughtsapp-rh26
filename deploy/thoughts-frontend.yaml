@@ -40,8 +40,8 @@ spec:
         - containerPort: 3000
           protocol: TCP
         env:
-        - name: NEXT_PUBLIC_API_BASE_URL
-          value: https://thoughts-backend-thoughts-app.apps.cluster-6pfqs.6pfqs.sandbox2325.opentlc.com
+        - name: API_BACKEND_URL
+          value: http://thoughts-backend:8080
         resources:
           limits:
             cpu: 500m

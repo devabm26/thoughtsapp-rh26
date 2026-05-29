@@ -1,5 +1,7 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
-export const EVALUATION_API_BASE_URL = import.meta.env.VITE_EVALUATION_API_BASE_URL || "http://localhost:8088";
+// Use relative URLs that nginx will proxy to the actual backend services
+// In production, nginx proxies /api -> thoughts-backend:8080 and /evaluation-api -> thoughts-evaluation:8088
+export const API_BASE_URL = "/api";
+export const EVALUATION_API_BASE_URL = "/evaluation-api";
 
 export interface Thought {
   id: string;

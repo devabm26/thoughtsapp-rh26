@@ -40,10 +40,10 @@ spec:
         - containerPort: 8080
           protocol: TCP
         env:
-        - name: VITE_API_BASE_URL
-          value: https://thoughts-backend-thoughts-app.apps.cluster-6pfqs.6pfqs.sandbox2325.opentlc.com
-        - name: VITE_EVALUATION_API_BASE_URL
-          value: https://thoughts-evaluation-thoughts-app.apps.cluster-6pfqs.6pfqs.sandbox2325.opentlc.com
+        - name: API_BACKEND_URL
+          value: http://thoughts-backend:8080
+        - name: EVALUATION_API_URL
+          value: http://thoughts-evaluation:8088
         resources:
           limits:
             cpu: 200m

@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 # Build the thoughts-frontend image using podman
 # Two-step approach: 1) Build Next.js app locally, 2) Package in container
+# Note: Backend URL is configured at runtime via API_BACKEND_URL env var, not at build time
 
 set -e
 
-# Set default environment variables for the build
-NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
-
 echo "Step 1: Building Next.js app locally..."
-echo "API Base URL: ${NEXT_PUBLIC_API_BASE_URL}"
-NEXT_PUBLIC_API_BASE_URL="${NEXT_PUBLIC_API_BASE_URL}" npm run build
+npm run build
 
 echo ""
 echo "Step 2: Building container image..."

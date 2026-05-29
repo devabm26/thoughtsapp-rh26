@@ -3,7 +3,9 @@
 import { Thought } from './types';
 
 // Get base URL from environment variable
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+// Use relative /api/* URLs which Next.js will proxy to the backend
+// In production, /api/* is rewritten to the backend URL configured in API_BACKEND_URL env var
+const API_BASE_URL = '/api';
 
 // Custom error class for API errors
 export class ApiError extends Error {

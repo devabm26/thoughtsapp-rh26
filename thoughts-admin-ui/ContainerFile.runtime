@@ -6,31 +6,42 @@
 
 FROM registry.access.redhat.com/ubi9/nginx-124:latest
 
-# Copy pre-built Vite application
-COPY --chown=1001:0 dist /usr/share/nginx/html
+# Copy pre-built Vite application to nginx default root
+COPY --chown=1001:0 dist /opt/app-root/src
 
-# Copy nginx configuration for SPA routing
-COPY <<EOF /etc/nginx/conf.d/default.conf
-server {
-    listen 8080;
-    server_name _;
-    root /usr/share/nginx/html;
-    index index.html;
+# Copy proxy configuration template
+COPY --chown=1001:0 proxy.conf.template /tmp/proxy.conf.template
 
-    location / {
-        try_files \$uri \$uri/ /index.html;
-    }
+# Create writable directory for nginx config
+USER 0
+RUN mkdir -p /opt/app-root/etc/nginx.default.d && \
+    chown -R 1001:0 /opt/app-root/etc/nginx.default.d && \
+    chmod -R g+rwX /opt/app-root/etc/nginx.default.d && \
+    chown -R 1001:0 /opt/app-root/src && \
+    chmod -R g+rwX /opt/app-root/src
 
-    # Compression
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
-}
+# Create entrypoint script for environment variable substitution
+COPY --chmod=755 <<'EOF' /docker-entrypoint.sh
+#!/bin/bash
+set -e
+
+# Set defaults if not provided
+export API_BACKEND_URL=${API_BACKEND_URL:-http://localhost:8080}
+export EVALUATION_API_URL=${EVALUATION_API_URL:-http://localhost:8088}
+
+# Substitute environment variables in proxy config
+envsubst '${API_BACKEND_URL} ${EVALUATION_API_URL}' < /tmp/proxy.conf.template > /opt/app-root/etc/nginx.default.d/proxy.conf
+
+echo "Nginx configured with:"
+echo "  API_BACKEND_URL=${API_BACKEND_URL}"
+echo "  EVALUATION_API_URL=${EVALUATION_API_URL}"
+
+# Start nginx
+exec nginx -g "daemon off;"
 EOF
 
 EXPOSE 8080
 
 USER 1001
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/docker-entrypoint.sh"]
