@@ -2,10 +2,13 @@
 -- Description: Creates table to store predefined positive and negative vectors for thought evaluation
 -- Reversible: Yes (see rollback script)
 
+-- Create pgvector extension if not exists
+CREATE EXTENSION IF NOT EXISTS vector;
+
 -- Create evaluation_vectors table
 CREATE TABLE IF NOT EXISTS evaluation_vectors (
     id UUID PRIMARY KEY,
-    vector_data JSONB NOT NULL,
+    embedding vector NOT NULL,
     vector_type VARCHAR(20) NOT NULL CHECK (vector_type IN ('POSITIVE', 'NEGATIVE')),
     label VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL
