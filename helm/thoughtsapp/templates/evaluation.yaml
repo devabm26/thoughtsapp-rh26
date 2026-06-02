@@ -1,0 +1,104 @@
+{{- if .Values.evaluation.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.evaluation.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.evaluation.name }}
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.evaluation.port }}
+    targetPort: {{ .Values.evaluation.port }}
+  selector:
+    app: {{ .Values.evaluation.name }}
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.evaluation.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.evaluation.name }}
+spec:
+  replicas: {{ .Values.evaluation.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.evaluation.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.evaluation.name }}
+    spec:
+      containers:
+      - name: {{ .Values.evaluation.name }}
+        image: {{ .Values.evaluation.image }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.evaluation.port }}
+          protocol: TCP
+        env:
+        - name: QUARKUS_DATASOURCE_JDBC_URL
+          value: {{ include "thoughtsapp.postgresql.url" . }}
+        - name: QUARKUS_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-user
+        - name: QUARKUS_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-password
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          value: {{ include "thoughtsapp.kafka.bootstrap" . }}
+        - name: OPENSHIFT_AI_ENDPOINT_URL
+          valueFrom:
+            secretKeyRef:
+              name: evaluation-secret
+              key: OPENSHIFT_AI_ENDPOINT_URL
+        - name: OPENSHIFT_AI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: evaluation-secret
+              key: OPENSHIFT_AI_API_KEY
+        - name: OPENAI_BASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: evaluation-secret
+              key: OPENAI_BASE_URL
+        - name: EMBEDDING_MODEL_NAME
+          valueFrom:
+            secretKeyRef:
+              name: evaluation-secret
+              key: EMBEDDING_MODEL_NAME
+        resources:
+          {{- toYaml .Values.evaluation.resources | nindent 10 }}
+{{- if .Values.evaluation.route.enabled }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.evaluation.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.evaluation.name }}
+spec:
+  {{- if or .Values.evaluation.route.host .Values.global.clusterDomain }}
+  host: {{ .Values.evaluation.route.host | default (printf "%s-%s.%s" .Values.evaluation.name .Release.Namespace .Values.global.clusterDomain) }}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ .Values.evaluation.name }}
+  port:
+    targetPort: http
+  {{- if .Values.evaluation.route.tls }}
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  {{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,133 @@
+# Default values for thoughtsapp
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global settings
+global:
+  namespace: thoughts-app
+  # OpenShift cluster domain (e.g., apps.cluster-abc.example.com)
+  # Leave empty to auto-detect or use default cluster domain
+  clusterDomain: ""
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  image: pgvector/pgvector:pg17
+  database: thoughts
+  username: thoughts
+  password: thoughts123
+  storage:
+    size: 1Gi
+    className: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Kafka configuration (AMQ Streams)
+kafka:
+  enabled: true
+  version: 3.7.0
+  operatorVersion: 2.7.0-7
+  replicas: 3
+  storage:
+    type: ephemeral
+  topic:
+    name: thoughts.events
+    partitions: 3
+    replicas: 3
+
+# Backend service configuration
+backend:
+  enabled: true
+  name: thoughts-backend
+  image: quay.io/redhat_na_ssa/thoughtsapp-backend:latest
+  replicas: 1
+  port: 8080
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+  hibernate:
+    generation: update
+  route:
+    enabled: true
+    tls: true
+    # Custom host (optional). If empty, uses: <service-name>-<namespace>.<clusterDomain>
+    host: ""
+
+# Evaluation service configuration
+evaluation:
+  enabled: true
+  name: thoughts-evaluation
+  image: quay.io/redhat_na_ssa/thoughtsapp-evaluation:latest
+  replicas: 1
+  port: 8088
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+  llm:
+    endpoint: http://localhost:11434/v1
+    apiKey: dummy-key
+    baseUrl: http://localhost:11434/v1
+    embeddingModel: nomic-embed-text
+  route:
+    enabled: true
+    tls: true
+    # Custom host (optional). If empty, uses: <service-name>-<namespace>.<clusterDomain>
+    host: ""
+
+# Frontend service configuration
+frontend:
+  enabled: true
+  name: thoughts-frontend
+  image: quay.io/redhat_na_ssa/thoughtsapp-frontend:latest
+  replicas: 1
+  port: 3000
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  route:
+    enabled: true
+    tls: true
+    # Custom host (optional). If empty, uses: <service-name>-<namespace>.<clusterDomain>
+    host: ""
+
+# Admin UI service configuration
+adminUi:
+  enabled: true
+  name: thoughts-admin-ui
+  image: quay.io/redhat_na_ssa/thoughtsapp-admin-ui:latest
+  replicas: 1
+  port: 8080
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+  route:
+    enabled: true
+    tls: true
+    # Custom host (optional). If empty, uses: <service-name>-<namespace>.<clusterDomain>
+    host: ""
+
+# Database seeding configuration
+seed:
+  enabled: true
+  ttlSecondsAfterFinished: 300

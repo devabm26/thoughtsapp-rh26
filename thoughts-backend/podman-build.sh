@@ -5,6 +5,10 @@
 
 set -e
 
+# Set Java 21 for build
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+export PATH="$JAVA_HOME/bin:$PATH"
+
 echo "Step 1: Building uber-jar locally..."
 echo "Java version: $(java -version 2>&1 | head -1)"
 ./mvnw clean package -DskipTests -Dquarkus.package.jar.type=uber-jar

@@ -1,0 +1,64 @@
+{{- if .Values.seed.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgresql-seed
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: postgresql-seed
+spec:
+  ttlSecondsAfterFinished: {{ .Values.seed.ttlSecondsAfterFinished }}
+  template:
+    metadata:
+      labels:
+        app: postgresql-seed
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: seed
+        image: {{ .Values.postgresql.image }}
+        command:
+        - /bin/bash
+        - -c
+        - |
+          # Wait for PostgreSQL to be ready
+          until pg_isready -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB}; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
+          # Check if data already exists
+          COUNT=$(psql -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -t -c "SELECT COUNT(*) FROM thoughts;" 2>/dev/null || echo "0")
+
+          if [ "$COUNT" -gt "0" ]; then
+            echo "Database already seeded with $COUNT thoughts. Skipping."
+            exit 0
+          fi
+
+          echo "Seeding database..."
+          psql -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /seed/import.sql
+          echo "Database seeded successfully!"
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-name
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-user
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-password
+        volumeMounts:
+        - name: seed-data
+          mountPath: /seed
+      volumes:
+      - name: seed-data
+        configMap:
+          name: postgresql-seed-data
+{{- end }}

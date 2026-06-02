@@ -1,0 +1,72 @@
+{{- if .Values.frontend.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.frontend.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.frontend.name }}
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.frontend.port }}
+    targetPort: {{ .Values.frontend.port }}
+  selector:
+    app: {{ .Values.frontend.name }}
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.frontend.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.frontend.name }}
+spec:
+  replicas: {{ .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.frontend.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.frontend.name }}
+    spec:
+      containers:
+      - name: {{ .Values.frontend.name }}
+        image: {{ .Values.frontend.image }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.frontend.port }}
+          protocol: TCP
+        env:
+        - name: API_BACKEND_URL
+          value: http://{{ .Values.backend.name }}:{{ .Values.backend.port }}
+        resources:
+          {{- toYaml .Values.frontend.resources | nindent 10 }}
+{{- if .Values.frontend.route.enabled }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.frontend.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.frontend.name }}
+spec:
+  {{- if or .Values.frontend.route.host .Values.global.clusterDomain }}
+  host: {{ .Values.frontend.route.host | default (printf "%s-%s.%s" .Values.frontend.name .Release.Namespace .Values.global.clusterDomain) }}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ .Values.frontend.name }}
+  port:
+    targetPort: http
+  {{- if .Values.frontend.route.tls }}
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  {{- end }}
+{{- end }}
+{{- end }}

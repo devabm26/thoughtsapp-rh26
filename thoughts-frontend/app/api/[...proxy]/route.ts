@@ -37,6 +37,17 @@ export async function DELETE(
   return proxyRequest(request, params.proxy, 'DELETE');
 }
 
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  });
+}
+
 async function proxyRequest(
   request: NextRequest,
   pathSegments: string[],
@@ -51,8 +62,9 @@ async function proxyRequest(
   try {
     const headers: Record<string, string> = {};
     request.headers.forEach((value, key) => {
-      // Skip host and connection headers
-      if (!['host', 'connection'].includes(key.toLowerCase())) {
+      // Skip host, connection, and content-length headers (will be set automatically)
+      const lowerKey = key.toLowerCase();
+      if (!['host', 'connection', 'content-length'].includes(lowerKey)) {
         headers[key] = value;
       }
     });
@@ -64,9 +76,17 @@ async function proxyRequest(
 
     // Add body for POST/PUT requests
     if (method === 'POST' || method === 'PUT') {
-      const body = await request.text();
-      if (body) {
-        options.body = body;
+      try {
+        const contentType = request.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const body = await request.text();
+          if (body && body.length > 0) {
+            options.body = body;
+          }
+        }
+      } catch (error) {
+        // No body or error reading body - continue without it
+        console.log('No body for request:', error);
       }
     }
 
@@ -77,6 +97,9 @@ async function proxyRequest(
       status: response.status,
       headers: {
         'Content-Type': response.headers.get('Content-Type') || 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
     });
   } catch (error) {

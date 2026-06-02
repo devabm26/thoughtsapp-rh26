@@ -1,0 +1,74 @@
+{{- if .Values.adminUi.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.adminUi.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.adminUi.name }}
+spec:
+  ports:
+  - name: http
+    port: {{ .Values.adminUi.port }}
+    targetPort: {{ .Values.adminUi.port }}
+  selector:
+    app: {{ .Values.adminUi.name }}
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.adminUi.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.adminUi.name }}
+spec:
+  replicas: {{ .Values.adminUi.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.adminUi.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.adminUi.name }}
+    spec:
+      containers:
+      - name: {{ .Values.adminUi.name }}
+        image: {{ .Values.adminUi.image }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.adminUi.port }}
+          protocol: TCP
+        env:
+        - name: API_BACKEND_URL
+          value: http://{{ .Values.backend.name }}:{{ .Values.backend.port }}
+        - name: EVALUATION_API_URL
+          value: http://{{ .Values.evaluation.name }}:{{ .Values.evaluation.port }}
+        resources:
+          {{- toYaml .Values.adminUi.resources | nindent 10 }}
+{{- if .Values.adminUi.route.enabled }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Values.adminUi.name }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.adminUi.name }}
+spec:
+  {{- if or .Values.adminUi.route.host .Values.global.clusterDomain }}
+  host: {{ .Values.adminUi.route.host | default (printf "%s-%s.%s" .Values.adminUi.name .Release.Namespace .Values.global.clusterDomain) }}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ .Values.adminUi.name }}
+  port:
+    targetPort: http
+  {{- if .Values.adminUi.route.tls }}
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  {{- end }}
+{{- end }}
+{{- end }}

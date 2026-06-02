@@ -1,0 +1,64 @@
+{{- if .Values.kafka.enabled }}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: thoughtsapp-kafka
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+spec:
+  kafka:
+    version: {{ .Values.kafka.version }}
+    replicas: {{ .Values.kafka.replicas }}
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+    config:
+      offsets.topic.replication.factor: {{ min 3 .Values.kafka.replicas }}
+      transaction.state.log.replication.factor: {{ min 3 .Values.kafka.replicas }}
+      transaction.state.log.min.isr: {{ min 2 .Values.kafka.replicas }}
+      default.replication.factor: {{ min 3 .Values.kafka.replicas }}
+      min.insync.replicas: {{ min 2 .Values.kafka.replicas }}
+      inter.broker.protocol.version: "3.7"
+    storage:
+      {{- if eq .Values.kafka.storage.type "ephemeral" }}
+      type: ephemeral
+      {{- else }}
+      type: persistent-claim
+      size: {{ .Values.kafka.storage.size | default "10Gi" }}
+      deleteClaim: false
+      {{- end }}
+  zookeeper:
+    replicas: {{ min 3 .Values.kafka.replicas }}
+    storage:
+      {{- if eq .Values.kafka.storage.type "ephemeral" }}
+      type: ephemeral
+      {{- else }}
+      type: persistent-claim
+      size: {{ .Values.kafka.storage.zookeeperSize | default "5Gi" }}
+      deleteClaim: false
+      {{- end }}
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: {{ .Values.kafka.topic.name | replace "." "-" }}
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    strimzi.io/cluster: thoughtsapp-kafka
+spec:
+  partitions: {{ .Values.kafka.topic.partitions }}
+  replicas: {{ min .Values.kafka.topic.replicas .Values.kafka.replicas }}
+  config:
+    retention.ms: 604800000
+    segment.bytes: 1073741824
+{{- end }}

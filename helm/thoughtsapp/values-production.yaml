@@ -1,0 +1,75 @@
+# Production values for thoughtsapp
+# Override default development values for production deployment
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  storage:
+    size: 10Gi
+    className: gp3  # Update with your storage class
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+# Kafka configuration
+kafka:
+  enabled: true
+  replicas: 3
+  storage:
+    type: persistent-claim
+    size: 50Gi
+    zookeeperSize: 10Gi
+
+# Backend service
+backend:
+  replicas: 3
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 2000m
+      memory: 1Gi
+
+# Evaluation service
+evaluation:
+  replicas: 2
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 2000m
+      memory: 1Gi
+  llm:
+    # Update with your actual LLM endpoint
+    endpoint: http://litellm-proxy:4000/v1
+    apiKey: "REPLACE_WITH_YOUR_API_KEY"
+    baseUrl: http://litellm-proxy:4000/v1
+    embeddingModel: nomic-embed-text
+
+# Frontend service
+frontend:
+  replicas: 2
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+
+# Admin UI service
+adminUi:
+  replicas: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi

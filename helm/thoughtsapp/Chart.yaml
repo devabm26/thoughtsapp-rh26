@@ -1,0 +1,15 @@
+apiVersion: v2
+name: thoughtsapp
+description: A microservices demo application showcasing Red Hat OpenShift, Quarkus, and AI integration
+type: application
+version: 1.0.0
+appVersion: "1.0"
+keywords:
+  - microservices
+  - quarkus
+  - ai
+  - kafka
+  - postgresql
+  - langchain4j
+maintainers:
+  - name: Red Hat NA SSA
