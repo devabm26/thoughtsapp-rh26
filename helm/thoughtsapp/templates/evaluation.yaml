@@ -32,7 +32,83 @@ spec:
     metadata:
       labels:
         app: {{ .Values.evaluation.name }}
+      annotations:
+        checksum/llm-config: {{ include (print $.Template.BasePath "/evaluation-llm-config.yaml") . | sha256sum }}
     spec:
+      initContainers:
+      - name: wait-for-dependencies
+        image: {{ .Values.postgresql.image }}
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Waiting for PostgreSQL to be ready..."
+          until pg_isready -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB}; do
+            echo "PostgreSQL not ready, waiting..."
+            sleep 2
+          done
+          echo "✓ PostgreSQL is ready"
+
+          echo "Waiting for backend to create schema..."
+          MAX_WAIT=300  # 5 minutes
+          WAITED=0
+
+          # Wait for thoughts table to exist (created by backend)
+          until psql -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "\d thoughts" >/dev/null 2>&1; do
+            if [ $WAITED -ge $MAX_WAIT ]; then
+              echo "ERROR: Timeout waiting for 'thoughts' table to be created."
+              echo "Make sure the thoughts-backend service is running."
+              exit 1
+            fi
+            echo "Waiting for backend schema (${WAITED}s/${MAX_WAIT}s)..."
+            sleep 5
+            WAITED=$((WAITED + 5))
+          done
+          echo "✓ Backend schema ready"
+
+          # Verify pgvector extension is installed
+          if ! psql -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "SELECT * FROM pg_extension WHERE extname='vector';" | grep -q vector; then
+            echo "ERROR: pgvector extension is not installed."
+            exit 1
+          fi
+          echo "✓ pgvector extension installed"
+
+          echo "Waiting for Kafka to be ready..."
+          KAFKA_BOOTSTRAP="{{ include "thoughtsapp.kafka.bootstrap" . }}"
+          KAFKA_HOST="${KAFKA_BOOTSTRAP%%:*}"  # Extract host (before colon)
+          KAFKA_PORT="${KAFKA_BOOTSTRAP##*:}"  # Extract port (after colon)
+          MAX_WAIT=300
+          WAITED=0
+
+          until timeout 5 bash -c "cat < /dev/null > /dev/tcp/${KAFKA_HOST}/${KAFKA_PORT}" 2>/dev/null; do
+            if [ $WAITED -ge $MAX_WAIT ]; then
+              echo "ERROR: Timeout waiting for Kafka at ${KAFKA_HOST}:${KAFKA_PORT}"
+              echo "Make sure the Kafka cluster is running."
+              exit 1
+            fi
+            echo "Kafka not ready at ${KAFKA_HOST}:${KAFKA_PORT}, waiting... (${WAITED}s/${MAX_WAIT}s)"
+            sleep 5
+            WAITED=$((WAITED + 5))
+          done
+          echo "✓ Kafka is ready at ${KAFKA_HOST}:${KAFKA_PORT}"
+
+          echo "All dependencies ready. Starting evaluation service..."
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-name
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-user
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-password
       containers:
       - name: {{ .Values.evaluation.name }}
         image: {{ .Values.evaluation.image }}
@@ -57,23 +133,23 @@ spec:
           value: {{ include "thoughtsapp.kafka.bootstrap" . }}
         - name: OPENSHIFT_AI_ENDPOINT_URL
           valueFrom:
-            secretKeyRef:
-              name: evaluation-secret
+            configMapKeyRef:
+              name: evaluation-llm-config
               key: OPENSHIFT_AI_ENDPOINT_URL
         - name: OPENSHIFT_AI_API_KEY
           valueFrom:
             secretKeyRef:
-              name: evaluation-secret
+              name: evaluation-llm-secret
               key: OPENSHIFT_AI_API_KEY
         - name: OPENAI_BASE_URL
           valueFrom:
-            secretKeyRef:
-              name: evaluation-secret
+            configMapKeyRef:
+              name: evaluation-llm-config
               key: OPENAI_BASE_URL
         - name: EMBEDDING_MODEL_NAME
           valueFrom:
-            secretKeyRef:
-              name: evaluation-secret
+            configMapKeyRef:
+              name: evaluation-llm-config
               key: EMBEDDING_MODEL_NAME
         resources:
           {{- toYaml .Values.evaluation.resources | nindent 10 }}

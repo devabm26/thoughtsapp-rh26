@@ -1,11 +1,9 @@
--- Migration: Migrate from JSONB to pgvector for vector storage
--- Description: Enables pgvector extension, drops old JSONB column, adds native vector column
+-- Migration: Cleanup for pgvector
+-- Description: Clears any legacy seed data. The embedding column already exists from V1.
+-- Real vectors will be generated via POST /vectors/initialize
 
+-- Ensure pgvector extension exists (redundant with init script, but safe)
 CREATE EXTENSION IF NOT EXISTS vector;
 
-ALTER TABLE evaluation_vectors DROP COLUMN IF EXISTS vector_data;
-ALTER TABLE evaluation_vectors ADD COLUMN embedding vector;
-
--- Delete seed data from V3 (fake vectors with inconsistent dimensions)
--- Real vectors will be regenerated via POST /vectors/initialize
+-- Clear any existing data (V3 seed data would be incompatible)
 DELETE FROM evaluation_vectors;

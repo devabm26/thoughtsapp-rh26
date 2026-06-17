@@ -33,6 +33,51 @@ spec:
       labels:
         app: {{ .Values.backend.name }}
     spec:
+      initContainers:
+      - name: wait-for-dependencies
+        image: {{ .Values.postgresql.image }}
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Waiting for PostgreSQL to be ready..."
+          until pg_isready -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB}; do
+            echo "PostgreSQL not ready, waiting..."
+            sleep 2
+          done
+          echo "✓ PostgreSQL is ready"
+
+          echo "Waiting for Kafka to be ready..."
+          KAFKA_BOOTSTRAP="{{ include "thoughtsapp.kafka.bootstrap" . }}"
+          KAFKA_HOST="${KAFKA_BOOTSTRAP%%:*}"  # Extract host (before colon)
+          KAFKA_PORT="${KAFKA_BOOTSTRAP##*:}"  # Extract port (after colon)
+          MAX_WAIT=300  # 5 minutes
+          WAITED=0
+
+          until timeout 5 bash -c "cat < /dev/null > /dev/tcp/${KAFKA_HOST}/${KAFKA_PORT}" 2>/dev/null; do
+            if [ $WAITED -ge $MAX_WAIT ]; then
+              echo "ERROR: Timeout waiting for Kafka at ${KAFKA_HOST}:${KAFKA_PORT}"
+              echo "Make sure the Kafka cluster is running."
+              exit 1
+            fi
+            echo "Kafka not ready at ${KAFKA_HOST}:${KAFKA_PORT}, waiting... (${WAITED}s/${MAX_WAIT}s)"
+            sleep 5
+            WAITED=$((WAITED + 5))
+          done
+          echo "✓ Kafka is ready at ${KAFKA_HOST}:${KAFKA_PORT}"
+
+          echo "All dependencies ready. Starting backend service..."
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-name
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: database-user
       containers:
       - name: {{ .Values.backend.name }}
         image: {{ .Values.backend.image }}

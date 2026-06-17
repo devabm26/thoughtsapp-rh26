@@ -21,3 +21,8 @@
 .idea/
 *.tmproj
 .vscode/
+# Documentation files
+*.md
+# LLM config example and user customization files (not templates)
+llm-config-example.yaml
+my-llm-config.yaml

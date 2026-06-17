@@ -77,10 +77,12 @@ evaluation:
       cpu: 1000m
       memory: 512Mi
   llm:
-    endpoint: http://localhost:11434/v1
-    apiKey: dummy-key
-    baseUrl: http://localhost:11434/v1
-    embeddingModel: nomic-embed-text
+    # LLM configuration - override via ConfigMap or custom values
+    # See templates/evaluation-llm-config.yaml for ConfigMap approach
+    endpoint: ""
+    apiKey: ""
+    baseUrl: ""
+    embeddingModel: ""
   route:
     enabled: true
     tls: true

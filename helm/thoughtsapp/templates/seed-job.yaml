@@ -27,6 +27,24 @@ spec:
             sleep 2
           done
 
+          echo "PostgreSQL is ready. Waiting for backend service to create schema..."
+
+          # Wait for the thoughts table to exist (created by backend via Hibernate)
+          MAX_WAIT=300  # 5 minutes
+          WAITED=0
+          until psql -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c "\d thoughts" >/dev/null 2>&1; do
+            if [ $WAITED -ge $MAX_WAIT ]; then
+              echo "ERROR: Timeout waiting for 'thoughts' table to be created by backend service."
+              echo "Make sure the thoughts-backend service is running and has created the database schema."
+              exit 1
+            fi
+            echo "Waiting for backend service to create schema (${WAITED}s/${MAX_WAIT}s)..."
+            sleep 5
+            WAITED=$((WAITED + 5))
+          done
+
+          echo "Schema detected. Checking if data already exists..."
+
           # Check if data already exists
           COUNT=$(psql -h postgresql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -t -c "SELECT COUNT(*) FROM thoughts;" 2>/dev/null || echo "0")
 

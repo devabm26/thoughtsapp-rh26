@@ -1,0 +1,25 @@
+{{- if .Values.evaluation.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: evaluation-llm-config
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.evaluation.name }}
+data:
+  OPENSHIFT_AI_ENDPOINT_URL: {{ .Values.evaluation.llm.endpoint | default "https://litellm-prod.apps.maas.redhatworkshops.io/v1" | quote }}
+  OPENAI_BASE_URL: {{ .Values.evaluation.llm.baseUrl | default (.Values.evaluation.llm.endpoint | default "https://litellm-prod.apps.maas.redhatworkshops.io/v1") | quote }}
+  EMBEDDING_MODEL_NAME: {{ .Values.evaluation.llm.embeddingModel | default "ai/nomic-embed-text-v1.5" | quote }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: evaluation-llm-secret
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: {{ .Values.evaluation.name }}
+type: Opaque
+stringData:
+  OPENSHIFT_AI_API_KEY: {{ .Values.evaluation.llm.apiKey | default "dummy-key" | quote }}
+{{- end }}

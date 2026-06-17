@@ -1,6 +1,25 @@
 {{- if .Values.postgresql.enabled }}
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-init
+  labels:
+    {{- include "thoughtsapp.labels" . | nindent 4 }}
+    app: postgresql
+data:
+  init-pgvector.sh: |
+    #!/bin/bash
+    set -e
+
+    echo "Creating pgvector extension..."
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+      CREATE EXTENSION IF NOT EXISTS vector;
+      \dx vector
+    EOSQL
+    echo "pgvector extension created successfully."
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: postgresql
@@ -58,6 +77,8 @@ spec:
         - containerPort: 5432
           protocol: TCP
         env:
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
         - name: POSTGRES_DB
           valueFrom:
             secretKeyRef:
@@ -76,10 +97,16 @@ spec:
         volumeMounts:
         - name: postgresql-data
           mountPath: /var/lib/postgresql/data
+        - name: postgresql-init
+          mountPath: /docker-entrypoint-initdb.d
         resources:
           {{- toYaml .Values.postgresql.resources | nindent 10 }}
       volumes:
       - name: postgresql-data
         persistentVolumeClaim:
           claimName: postgresql
+      - name: postgresql-init
+        configMap:
+          name: postgresql-init
+          defaultMode: 0755
 {{- end }}

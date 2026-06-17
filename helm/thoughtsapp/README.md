@@ -42,8 +42,20 @@ EOF
 
 ### Install with default values
 ```bash
-helm install thoughtsapp ./helm/thoughtsapp
+helm install thoughtsapp ./helm/thoughtsapp -n thoughts-app --create-namespace
 ```
+
+### Install with your LLM service (via command line)
+```bash
+helm install thoughtsapp ./helm/thoughtsapp \
+  -n thoughts-app \
+  --create-namespace \
+  --set evaluation.llm.endpoint="https://your-llm.example.com/v1" \
+  --set evaluation.llm.apiKey="your-api-key" \
+  --set evaluation.llm.embeddingModel="nomic-embed-text"
+```
+
+See [HELM_CLI_CONFIG.md](./HELM_CLI_CONFIG.md) for more command line options.
 
 ### Install with custom namespace
 ```bash
@@ -51,7 +63,7 @@ oc new-project my-thoughts-app
 helm install thoughtsapp ./helm/thoughtsapp --namespace my-thoughts-app
 ```
 
-### Install with custom values
+### Install with custom values file
 ```bash
 helm install thoughtsapp ./helm/thoughtsapp --values custom-values.yaml
 ```
@@ -101,9 +113,15 @@ The following table lists the configurable parameters and their default values.
 | `evaluation.image` | Evaluation container image | `quay.io/redhat_na_ssa/thoughtsapp-evaluation:latest` |
 | `evaluation.replicas` | Number of replicas | `1` |
 | `evaluation.port` | Service port | `8088` |
-| `evaluation.llm.endpoint` | LLM endpoint URL | `http://localhost:11434/v1` |
+| `evaluation.llm.endpoint` | LLM endpoint URL | `https://litellm-prod.apps.maas.redhatworkshops.io/v1` |
 | `evaluation.llm.apiKey` | LLM API key | `dummy-key` |
-| `evaluation.llm.embeddingModel` | Embedding model name | `nomic-embed-text` |
+| `evaluation.llm.embeddingModel` | Embedding model name | `ai/nomic-embed-text-v1.5` |
+
+**Important:** The default LLM endpoint is for demos/testing only. For production or self-hosted deployments, see [LLM_CONFIGURATION.md](./LLM_CONFIGURATION.md) for configuration options including:
+- Deploying Ollama in Kubernetes
+- Using your own LiteLLM proxy
+- Connecting to OpenAI API
+- Disabling the evaluation service
 
 ### Frontend Configuration
 
@@ -141,12 +159,13 @@ kafka:
     size: 20Gi
 
 # Configure LLM endpoint for evaluation service
+# See LLM_CONFIGURATION.md for more options
 evaluation:
   llm:
-    endpoint: http://litellm-proxy:4000/v1
-    apiKey: sk-1234567890
-    baseUrl: http://litellm-proxy:4000/v1
-    embeddingModel: text-embedding-ada-002
+    endpoint: http://ollama:11434/v1  # Self-hosted Ollama
+    apiKey: dummy-key
+    baseUrl: http://ollama:11434/v1
+    embeddingModel: nomic-embed-text
 
 # Scale backend for production
 backend:

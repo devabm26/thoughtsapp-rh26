@@ -1,0 +1,51 @@
+# Example: Custom LLM Configuration
+# Copy this file and customize with your LLM service details
+# Apply BEFORE installing the Helm chart or upgrade after installation
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: evaluation-llm-config
+  namespace: thoughts-app  # Update if using different namespace
+  labels:
+    app: thoughts-evaluation
+data:
+  # Your LLM endpoint URL (non-sensitive)
+  OPENSHIFT_AI_ENDPOINT_URL: "https://your-llm-service.example.com/v1"
+  OPENAI_BASE_URL: "https://your-llm-service.example.com/v1"
+
+  # Embedding model name
+  EMBEDDING_MODEL_NAME: "nomic-embed-text"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: evaluation-llm-secret
+  namespace: thoughts-app  # Update if using different namespace
+  labels:
+    app: thoughts-evaluation
+type: Opaque
+stringData:
+  # Your LLM API key (sensitive - keep secure!)
+  OPENSHIFT_AI_API_KEY: "your-api-key-here"
+
+---
+# How to use:
+#
+# 1. Copy this file:
+#    cp llm-config-example.yaml my-llm-config.yaml
+#
+# 2. Edit my-llm-config.yaml with your LLM service details
+#
+# 3. Apply the configuration:
+#    kubectl apply -f my-llm-config.yaml
+#
+# 4. Install or upgrade the Helm chart:
+#    helm upgrade --install thoughtsapp . -n thoughts-app --create-namespace
+#
+# The ConfigMap and Secret will override the default values.
+#
+# Note: If you change these after deployment, restart the evaluation pods:
+#    kubectl rollout restart deployment thoughts-evaluation -n thoughts-app
