@@ -33,6 +33,8 @@ kafka:
   version: 3.7.0
   operatorVersion: 2.7.0-7
   replicas: 3
+  # KRaft mode (true for Kafka 4.0+, false for ZooKeeper-based Kafka 3.x)
+  kraftMode: false
   storage:
     type: ephemeral
   topic:
